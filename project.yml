@@ -1,0 +1,54 @@
+name: ChemTutor
+options:
+  bundleIdPrefix: com.yourname
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+
+packages:
+  ZIPFoundation:
+    url: https://github.com/weichsel/ZIPFoundation
+    from: 0.9.19
+
+targets:
+  ChemTutor:
+    type: application
+    platform: iOS
+    sources: [ChemTutor]
+    dependencies:
+      - package: ZIPFoundation
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.yourname.chemtutor
+        TARGETED_DEVICE_FAMILY: "2"
+        SWIFT_VERSION: "5.0"
+        MARKETING_VERSION: 0.1.0
+        CURRENT_PROJECT_VERSION: 1
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Chem Tutor
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
+        INFOPLIST_KEY_NSCameraUsageDescription: Scan worksheets, practice tests and notes so the tutor can read them.
+        INFOPLIST_KEY_NSPhotoLibraryUsageDescription: Attach photos of practice problems and notes.
+        INFOPLIST_KEY_UIFileSharingEnabled: YES
+        INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace: NO
+
+  ChemTutorTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: [ChemTutorTests]
+    dependencies:
+      - target: ChemTutor
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        SWIFT_VERSION: "5.0"
+
+schemes:
+  ChemTutor:
+    build:
+      targets:
+        ChemTutor: all
+    test:
+      targets:
+        - ChemTutorTests
