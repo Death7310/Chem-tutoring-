@@ -1,0 +1,40 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'io.github.death7310.chemtutor'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'io.github.death7310.chemtutor'
+        minSdk 29
+        // 34 keeps the classic status bar; 35 would force edge-to-edge drawing under it.
+        targetSdk 34
+        // Each CI build gets a higher number so a new APK installs over the old one.
+        versionCode Integer.parseInt(System.getenv('GITHUB_RUN_NUMBER') ?: '1')
+        versionName '0.2.' + (System.getenv('GITHUB_RUN_NUMBER') ?: '0')
+    }
+
+    signingConfigs {
+        release {
+            // The build workflow creates this key; it is never stored in the repository.
+            storeFile file(System.getenv('KEYSTORE_FILE') ?: 'missing.jks')
+            storePassword System.getenv('KEYSTORE_PASSWORD')
+            keyAlias 'chemtutor'
+            keyPassword System.getenv('KEYSTORE_PASSWORD')
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}

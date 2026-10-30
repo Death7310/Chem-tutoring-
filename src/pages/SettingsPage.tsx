@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { exportStudyData, importStudyData } from "../lib/backup";
 import type { TutorMode } from "../lib/db";
+import { blobToBase64 } from "../lib/images";
 import { updateSettings, useSettings, type Effort } from "../lib/settings";
 
 export default function SettingsPage() {
@@ -11,10 +12,17 @@ export default function SettingsPage() {
 
   const backup = async () => {
     const blob = await exportStudyData();
+    const fileName = `chem-tutor-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    // Inside the Android app, the WebView can't download files itself; the app saves it to Downloads.
+    const bridge = (window as { AndroidBridge?: { saveFile: (b64: string, name: string, mime: string) => void } }).AndroidBridge;
+    if (bridge) {
+      bridge.saveFile(await blobToBase64(blob), fileName, "application/json");
+      return;
+    }
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `chem-tutor-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    a.download = fileName;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -96,7 +104,11 @@ export default function SettingsPage() {
 
       <h2>Install on your device</h2>
       <ul className="small">
-        <li><strong>Android (Chrome):</strong> menu ⋮ → <em>Add to Home screen</em> / <em>Install app</em>.</li>
+        <li>
+          <strong>Android:</strong> install the app file from{" "}
+          <a href="https://github.com/Death7310/Chem-tutoring-/releases/latest/download/chem-tutor.apk">this download link</a>, or in
+          Chrome use menu ⋮ → <em>Install app</em>.
+        </li>
         <li><strong>iPad (Safari):</strong> Share → <em>Add to Home Screen</em>. Use it from the home-screen icon so Safari doesn't clear its storage.</li>
       </ul>
     </div>
