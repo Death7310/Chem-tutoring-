@@ -1,123 +1,127 @@
 # Chem Tutor
 
-An iPad study app for chemistry. You import your textbooks, photograph or scan practice
-problems, work them out with an Apple Pencil, and get help from an AI tutor (Claude) that
-reads your actual book and cites the pages it uses.
+A chemistry study app for **iPad (with Apple Pencil) and Android phones**. It's a web app you
+install from the browser, so the same app runs on both devices with no App Store, no Mac and
+no Xcode.
 
-The tutor is designed to make sure you understand the material, not just get the answer:
+- **Library:** import your textbook as a PDF or EPUB (or notes as TXT/Markdown) and read it in
+  the app. Scanned PDFs are read with on-device OCR.
+- **Tutor:** an AI tutor (Claude) that answers from *your* book and cites the pages.
+  - **Coach mode** gives hints before answers.
+  - When you get something right, it checks your understanding from a different angle: the
+    particle level, the lab level, the math, a reversed problem, or a planted mistake.
+  - It asks clarifying questions when your question is unclear or it suspects a misconception.
+  - **Explain** and **Quiz me** modes are also available.
+- **Practice tests:** photograph a test or worksheet. Each question is transcribed, tagged with
+  concepts, and linked to:
+  - the **book pages that teach it**
+  - the **most similar end-of-chapter problems** in your book
+- **Book exercises:** add a chapter's end-of-chapter problems (the app suggests where they
+  are). They become practice problems linked to the sections that teach them.
+- **Handwriting:** work problems with the Apple Pencil (or an Android stylus, or a finger) and
+  send your work to the tutor to check, step by step. Once a stylus is detected, palm touches
+  are ignored.
+- **Review:** mark each problem ✅ / 🟡 / ❌. Missed problems come back sooner and correct ones
+  later (spaced repetition), mixed across topics. A "concepts to work on" list shows your
+  weak spots.
 
-- **Coach mode (default):** you get hints before answers, escalating gradually. A full
-  solution comes only after you've made a real attempt.
-- **Understanding checks:** when you get something right, the tutor asks about the same idea
-  from a different angle. That might be the particle level (what the molecules are doing), the
-  lab level (what you would observe), or the math. It might also reverse the problem, ask you
-  to predict what changes, or show a worked example with a planted mistake for you to find.
-- **Clarifying questions:** the tutor asks before explaining when your question is ambiguous
-  or it suspects a misconception.
-- **Explain** and **Quiz me** modes, for direct explanations or for being tested.
+## Getting it running
 
-## What works in this first version
+### 1. Turn on the website (one time, about 2 minutes)
 
-| Feature | Status |
-|---|---|
-| Import books: PDF, EPUB, TXT, Markdown (as many as you want) | ✅ |
-| Scanned PDFs (no text layer) are read with on-device OCR | ✅ |
-| Read books in the app (PDF viewer, EPUB/text chapter reader) | ✅ |
-| Tutor finds relevant passages and cites them; tap a citation to open that page | ✅ |
-| Limit a session to certain books | ✅ |
-| Attach photos, scan documents with the camera, or draw with Apple Pencil | ✅ |
-| The tutor reads handwriting and checks work step by step | ✅ |
-| Study sessions saved on the iPad | ✅ |
-| Practice-test library linked to book concepts, weak-spot review queue | Planned (phase 3) |
-| Writing on PDF pages, highlights feeding into notes | Planned (phase 4) |
+The app is hosted free on GitHub Pages from this repository.
 
-**DRM:** books bought through Kindle, VitalSource, Pearson, McGraw Hill Connect and similar
-platforms are usually DRM-locked and can't be imported. A DRM-free PDF or EPUB works, for
-example the free OpenStax *Chemistry 2e* (openstax.org).
+1. On GitHub, open the repository → **Settings** → **Pages**.
+2. Under **Build and deployment → Source**, choose **GitHub Actions**.
+3. Open the **Actions** tab, then **Test and deploy** → **Run workflow** (on `main`).
+   It also runs automatically every time `main` changes.
+4. When it finishes, the app is at **https://death7310.github.io/Chem-tutoring-/**
 
-## Setup on your Mac (about 20 minutes, one time)
+### 2. Install it on each device
 
-You need a Mac with **Xcode 16 or later** (free from the Mac App Store) and an iPad on
-**iPadOS 17 or later**.
+- **Android (Chrome):** open the link → menu ⋮ → **Install app** (or *Add to Home screen*).
+- **iPad (Safari):** open the link → Share → **Add to Home Screen**. Always open it from the
+  home-screen icon. That keeps your data safe from Safari's automatic storage cleanup.
 
-1. **Install XcodeGen**, which builds the Xcode project from `project.yml`:
-   ```sh
-   # Install Homebrew first if you don't have it: https://brew.sh
-   brew install xcodegen
-   ```
-2. **Get the code and generate the project:**
-   ```sh
-   git clone https://github.com/Death7310/Chem-tutoring-.git
-   cd Chem-tutoring-
-   xcodegen generate
-   open ChemTutor.xcodeproj
-   ```
-3. **Set up signing:** in Xcode, click the **ChemTutor** project, then the **ChemTutor** target,
-   then **Signing & Capabilities**:
-   - Team: choose your Apple ID (add it under Xcode → Settings → Accounts if needed).
-   - Bundle Identifier: change `com.yourname.chemtutor` to something unique, such as
-     `com.<yourname>.chemtutor`.
-4. **Prepare the iPad:** connect it with a USB-C cable and tap **Trust**. Then go to
-   Settings → Privacy & Security → **Developer Mode**, turn it on, and restart the iPad.
-5. **Run:** pick your iPad as the run destination at the top of Xcode and press ▶ (⌘R).
-   The first time, the iPad asks you to trust the developer under Settings → General →
-   VPN & Device Management.
-6. **Run the tests (optional):** ⌘U.
+### 3. Add your Claude API key
 
-With a free Apple ID the app stops opening after **7 days**. Reconnect the iPad and press ▶
-again to renew it (your books and sessions are kept). A paid Apple Developer account
-($99/year) extends this to a year.
+1. Create a key at <https://console.anthropic.com>. **Set a monthly spend limit there.** API
+   usage is billed separately from a Claude.ai subscription.
+2. In the app: **Settings** → paste the key → Save. It's stored only on that device and sent
+   only to Anthropic.
 
-## Claude API key
-
-1. Create an account and a key at <https://console.anthropic.com>.
-2. **Set a monthly spend limit** in the Console. API usage is billed separately from a
-   Claude.ai subscription.
-3. In the app: Settings → paste the key → Save. It's stored in the iPad's Keychain.
-
-**Cost:** each reply resends the conversation plus about 6 book passages. A typical tutoring
-reply should cost a few cents, and more when there are several images or the session is long.
-Start a new session when you change topics. That keeps replies cheaper and the tutor focused.
-The "Thinking effort" setting trades cost for care. Medium is a good default.
-
-## How it works
+## How the linking works
 
 ```
-Import (PDF/EPUB/TXT) → extract text (OCR for scans) → split into ~1,200-character passages
-                       → on-device keyword index (BM25)
+Book import ─ PDF/EPUB text (OCR for scans) → passages → on-device search index
 
-Your message + photos → OCR the photos → search the index → top passages
-                      → Claude (tutor instructions + passages + your images + conversation)
-                      → reply with page citations
+Test photo ─→ Claude transcribes each problem + tags concepts
+            ─→ for each problem: search finds candidate teaching pages (skipping exercise pages)
+                                  and candidate end-of-chapter problems
+            ─→ Claude picks the ones that actually match, with a reason
+            ─→ saved as links you can tap: "📖 p. 214 – defines molarity", "Problem 4.37"
 ```
 
-- Everything except the Claude call runs on the iPad. Books never leave the device. Only
-  the matched passages are sent with each question.
-- Code layout:
-  - `ChemTutor/Services/Importers/`: PDF, EPUB and text import, chunking, OCR
-  - `ChemTutor/Services/Search/BM25Index.swift`: passage search
-  - `ChemTutor/Services/Claude/TutorPrompt.swift`: the tutor's teaching rules (edit this to
-    change how it teaches)
-  - `ChemTutor/Services/TutorService.swift`: assembles each request
-  - `ChemTutor/Views/`: SwiftUI screens
+Claude only chooses from pages the search actually found, so it can't invent page numbers.
+Add a chapter's **book exercises before** (or after, then press **Re-link to book**) a practice
+test, so the test has exercises to match against.
 
-## Roadmap
+## Using two devices
 
-1. **Phase 1 (this version):** library, reader, grounded Q&A, photo/scan/Pencil input,
-   coaching tutor.
-2. **Phase 2:** save each Pencil page with its problem, and attach handwriting directly over
-   a PDF page.
-3. **Phase 3:** a practice-test library. Each problem is tagged with concepts and linked to
-   book sections, and missed concepts come back in spaced, mixed review sets.
-4. **Phase 4:** highlights and notes in the reader, plus a "ask about this page" button.
+Each device keeps its own data. To photograph a test on your phone and study it on your iPad:
 
-## Why the tutor behaves this way
+1. Phone: **Settings → Back up study data**. Save the file to Google Drive, or email it to
+   yourself.
+2. iPad: **Settings → Restore from backup** and pick that file.
 
-- Practice testing and spaced practice are the two study techniques rated "high utility" in
+Import the **same book file** on both devices. Books are identified by their content, so the
+page links match. Automatic sync is a possible future step. It needs an online account and
+server, so it's left out for now on purpose.
+
+## Costs
+
+Each tutor reply sends the conversation plus about 6 book passages. A practice test costs one
+request per 4 photo pages to transcribe, plus one per 6 problems to link. Expect a few cents
+per reply or per test page. Settings → Thinking effort trades cost for care, and Medium is the
+default. Starting a new session when you change topics keeps replies cheaper.
+
+## Limits
+
+- Copy-protected textbooks (Kindle, VitalSource, most publisher platforms) can't be imported.
+  DRM-free PDFs and EPUBs work, for example OpenStax *Chemistry 2e* (free at openstax.org).
+- OCR of scanned pages and photos downloads a ~10 MB engine the first time it's needed.
+- Concept tags and page links come from an AI and are usually right, but check them. Each
+  link opens the actual page.
+
+## Development
+
+```sh
+npm install
+npm run dev        # local dev server
+npm test           # unit + pipeline tests (Claude mocked)
+npm run build      # typecheck + production build
+```
+
+Code layout:
+
+- `src/lib/importers/`: PDF (pdf.js), EPUB, text, OCR, exercise-section detection
+- `src/lib/search/bm25.ts`: passage search
+- `src/lib/claude/prompts.ts`: the tutor's teaching rules and the extraction/linking
+  instructions (edit these to change how it teaches)
+- `src/lib/problems.ts`: test/exercise extraction and linking pipeline
+- `src/lib/tutor.ts`: tutor conversations
+- `src/lib/review.ts`: spaced review scheduling
+- `src/pages/`, `src/components/`: screens and the handwriting canvas
+
+## Why it teaches this way
+
+- Practice testing and spaced practice are the two techniques rated "high utility" in
   Dunlosky et al. (2013), *Psychological Science in the Public Interest*, 14(1).
-- Retrieval beats re-reading for long-term retention: Roediger & Karpicke (2006),
-  *Psychological Science*, 17(3).
+- Retrieval beats re-reading for retention: Roediger & Karpicke (2006), *Psychological
+  Science*, 17(3).
+- Mixing problem types improves picking the right method: Rohrer & Taylor (2007),
+  *Instructional Science*, 35(6).
 - Explaining in your own words improves understanding: Chi et al. (1994), *Cognitive
   Science*, 18(3).
-- Moving between the particle, lab and symbolic views of chemistry is where many students get
-  stuck: Johnstone (1991), *Journal of Computer Assisted Learning*, 7(2).
+- Moving between particle, lab and symbolic views is where chemistry gets hard: Johnstone
+  (1991), *Journal of Computer Assisted Learning*, 7(2).

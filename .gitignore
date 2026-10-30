@@ -1,12 +1,7 @@
-# Xcode project is generated from project.yml by XcodeGen
-*.xcodeproj/
-*.xcworkspace/
-xcuserdata/
-DerivedData/
-build/
-.swiftpm/
-*.ipa
-*.dSYM.zip
+node_modules/
+dist/
+dev-dist/
+*.log
 .DS_Store
 
 # Never commit books or study materials (copyright and privacy)
